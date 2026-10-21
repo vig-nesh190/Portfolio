@@ -1,0 +1,1810 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080b14" />
+    <meta
+      name="description"
+      content="Freelance frontend development and UI redesign — React, Angular, ERP applications, dashboards, API integrations and responsive websites."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <title>Pix Elvibez | Frontend Developer & UI Specialist</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #080b14;
+        --surface: rgba(17, 23, 40, 0.76);
+        --surface-solid: #111728;
+        --surface-2: #171f34;
+        --text: #f5f7ff;
+        --muted: #a4aec5;
+        --line: rgba(164, 174, 197, 0.17);
+        --accent: #35e3d0;
+        --accent-2: #4f83ff;
+        --accent-3: #a65bff;
+        --shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+        --nav-bg: rgba(8, 11, 20, 0.75);
+      }
+      [data-theme="light"] {
+        color-scheme: light;
+        --bg: #f5f7fc;
+        --surface: rgba(255, 255, 255, 0.84);
+        --surface-solid: #ffffff;
+        --surface-2: #edf2fb;
+        --text: #121a2b;
+        --muted: #5f6b82;
+        --line: rgba(35, 49, 76, 0.13);
+        --accent: #087f83;
+        --accent-2: #315fe8;
+        --accent-3: #8443cf;
+        --shadow: 0 24px 70px rgba(32, 50, 90, 0.12);
+        --nav-bg: rgba(245, 247, 252, 0.82);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 88px;
+      }
+      body {
+        margin: 0;
+        font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        overflow-x: hidden;
+        transition: background 0.3s ease, color 0.3s ease;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: -2;
+        background:
+          radial-gradient(ellipse at 12% 12%, rgba(35, 224, 208, 0.1), transparent 30%),
+          radial-gradient(ellipse at 88% 25%, rgba(89, 91, 255, 0.13), transparent 32%),
+          radial-gradient(ellipse at 55% 92%, rgba(166, 91, 255, 0.08), transparent 35%);
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button, a {
+        -webkit-tap-highlight-color: transparent;
+      }
+      button {
+        font: inherit;
+      }
+
+      /* Fullscreen Scroll-Driven 3D WebGL Canvas */
+      #webgl-canvas {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .scroll-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        width: 0%;
+        z-index: 100;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
+        box-shadow: 0 0 12px var(--accent);
+      }
+
+      .container {
+        position: relative;
+        z-index: 2;
+        width: min(1140px, calc(100% - 40px));
+        margin-inline: auto;
+      }
+
+      /* Topbar */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: blur(18px);
+        background: var(--nav-bg);
+        border-bottom: 1px solid var(--line);
+      }
+      .nav {
+        min-height: 76px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        font-weight: 850;
+        letter-spacing: -0.04em;
+      }
+      .brand-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1.5px solid var(--accent);
+        background: var(--surface-solid);
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+      }
+      .brand-name {
+        font-size: 17px;
+      }
+      .brand-name span {
+        color: var(--accent);
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 27px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 650;
+      }
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: var(--accent);
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .theme-toggle,
+      .menu-toggle {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--text);
+        border-radius: 13px;
+        cursor: pointer;
+      }
+      .theme-toggle:hover,
+      .menu-toggle:hover {
+        border-color: var(--accent);
+      }
+      .menu-toggle {
+        display: none;
+        font-size: 20px;
+      }
+      .btn {
+        min-height: 46px;
+        padding: 0 19px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        border: 1px solid transparent;
+        border-radius: 13px;
+        font-weight: 750;
+        font-size: 13px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+      .btn:hover {
+        transform: translateY(-3px);
+      }
+      .btn-primary {
+        color: #07111d;
+        background: linear-gradient(110deg, var(--accent), #65a7ff);
+        box-shadow: 0 10px 28px rgba(53, 227, 208, 0.17);
+      }
+      .btn-ghost {
+        border-color: var(--line);
+        background: var(--surface);
+        color: var(--text);
+      }
+
+      /* Hero */
+      .hero {
+        min-height: 670px;
+        display: grid;
+        grid-template-columns: 1.06fr 0.94fr;
+        align-items: center;
+        gap: 35px;
+        padding-block: 68px 82px;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 7px 13px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--surface);
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .pulse {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 13px var(--accent);
+      }
+      h1, h2, .service-card h3, .step h3 {
+        font-family: "Poppins", "Inter", sans-serif;
+      }
+      h1 {
+        margin: 22px 0 20px;
+        font-size: clamp(42px, 6.1vw, 76px);
+        line-height: 0.99;
+        letter-spacing: -0.045em;
+        font-weight: 800;
+      }
+      .gradient-text {
+        background: linear-gradient(100deg, var(--accent), #5e9aff 55%, var(--accent-3));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .hero-copy {
+        max-width: 580px;
+        color: var(--muted);
+        font-size: 16px;
+      }
+      .hero-copy strong {
+        color: var(--text);
+        font-weight: 700;
+      }
+      .hero-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+      }
+      .quick-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 28px;
+        margin-top: 35px;
+      }
+      .stat strong {
+        display: block;
+        font-size: 18px;
+        letter-spacing: -0.03em;
+      }
+      .stat span {
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      /* Dev Process Journey Card */
+      .visual {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        width: 100%;
+      }
+      .walk-scene {
+        width: 100%;
+        max-width: 540px;
+        position: relative;
+        padding: 16px 14px 14px;
+        border-radius: 22px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        backdrop-filter: blur(12px);
+        box-shadow: var(--shadow);
+      }
+      .walk-svg {
+        width: 100%;
+        height: auto;
+        display: block;
+        overflow: visible;
+      }
+      .road-base { fill: var(--surface-2); stroke: var(--line); stroke-width: 1.2; }
+      .road-dash { stroke: var(--line); stroke-width: 2; stroke-dasharray: 10 12; stroke-linecap: round; }
+      .conn { stroke: var(--line); stroke-width: 1.4; stroke-dasharray: 3 5; transition: stroke 0.4s; }
+      .stop-ring { fill: var(--surface-solid); stroke: var(--line); stroke-width: 2; transition: stroke 0.4s, fill 0.4s, filter 0.4s; }
+      .twinkle { fill: var(--accent); animation: twinkle 3s ease-in-out infinite; }
+
+      .step-card { cursor: pointer; }
+      .step-card.done .conn, .step-card.on .conn { stroke: var(--accent); }
+      .step-card.done .stop-ring { stroke: var(--accent); }
+      .step-card.on .stop-ring {
+        stroke: var(--accent);
+        fill: var(--accent);
+        filter: drop-shadow(0 0 7px rgba(53, 227, 208, 0.7));
+      }
+      .card-body { transition: transform 0.45s cubic-bezier(.3,1.5,.5,1); }
+      .step-card.on .card-body { transform: translateY(-5px); }
+      .card-bg { fill: var(--surface-solid); stroke: var(--line); stroke-width: 1.5; transition: stroke 0.4s, filter 0.4s; }
+      .step-card.done .card-bg { stroke: rgba(53, 227, 208, 0.45); }
+      .step-card.on .card-bg { stroke: var(--accent); filter: drop-shadow(0 0 10px rgba(53, 227, 208, 0.4)); }
+      .card-num { font: 800 8.5px "Inter", sans-serif; fill: var(--muted); text-anchor: middle; letter-spacing: 0.08em; transition: fill 0.4s; }
+      .card-label { font: 750 9.5px "Inter", sans-serif; fill: var(--muted); text-anchor: middle; transition: fill 0.4s; }
+      .step-card.done .card-num, .step-card.on .card-num,
+      .step-card.done .card-label, .step-card.on .card-label { fill: var(--accent); }
+
+      .ill-surface { fill: var(--surface-2); stroke: var(--muted); stroke-width: 1.4; transition: stroke 0.4s; }
+      .ill-line { fill: none; stroke: var(--muted); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: stroke 0.4s; }
+      .step-card.done .ill-surface, .step-card.on .ill-surface,
+      .step-card.done .ill-line, .step-card.on .ill-line { stroke: var(--accent); }
+
+      #eyeBlink { transform-box: fill-box; transform-origin: center; animation: blink 4.2s infinite; }
+
+      .walk-caption { text-align: center; margin-top: 8px; min-height: 102px; }
+      .cap-tag { display: inline-flex; align-items: center; gap: 7px; padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+      .cap-title { margin: 8px 0 4px; font: 700 20px/1.2 "Poppins", "Inter", sans-serif; letter-spacing: -0.02em; }
+      .cap-desc { margin: 0 auto; max-width: 440px; color: var(--muted); font-size: 13px; }
+      .cap-swap { transition: opacity 0.25s ease, transform 0.25s ease; }
+      .cap-swap.out { opacity: 0; transform: translateY(5px); }
+      .cap-dots { display: flex; justify-content: center; gap: 7px; margin-top: 11px; }
+      .cap-dots span { width: 22px; height: 4px; border-radius: 4px; background: var(--line); transition: background 0.3s, width 0.3s; }
+      .cap-dots span.active { background: var(--accent); }
+      .cap-dots span.current { width: 34px; }
+
+      @keyframes twinkle { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.8; } }
+      @keyframes blink { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.08); } }
+
+      /* Sections */
+      section {
+        padding-block: 78px;
+        position: relative;
+        z-index: 2;
+      }
+      .section-head {
+        max-width: 650px;
+        margin-bottom: 32px;
+      }
+      .kicker {
+        color: var(--accent);
+        font-size: 11px;
+        font-weight: 850;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      h2 {
+        margin: 10px 0 12px;
+        font-size: clamp(30px, 4vw, 46px);
+        line-height: 1.1;
+        letter-spacing: -0.035em;
+      }
+      .section-head p {
+        color: var(--muted);
+        margin: 0;
+      }
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+      }
+      .service-card,
+      .contact-card {
+        border: 1px solid var(--line);
+        border-radius: 21px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(14px);
+        transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      }
+      .service-card {
+        padding: 24px;
+        min-height: 220px;
+        cursor: pointer;
+      }
+      .service-card:hover,
+      .service-card.active-card {
+        transform: translateY(-6px);
+        border-color: rgba(53, 227, 208, 0.55);
+        box-shadow: 0 24px 65px rgba(53, 227, 208, 0.12);
+      }
+      .service-icon {
+        width: 46px;
+        height: 46px;
+        display: grid;
+        place-items: center;
+        border-radius: 14px;
+        margin-bottom: 17px;
+        font-size: 21px;
+        color: var(--accent);
+        background: linear-gradient(135deg, rgba(53, 227, 208, 0.14), rgba(79, 131, 255, 0.16));
+        border: 1px solid var(--line);
+      }
+      .service-card h3 {
+        font-size: 16px;
+        margin: 0 0 8px;
+        letter-spacing: -0.025em;
+      }
+      .service-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 16px;
+      }
+      .tag {
+        border: 1px solid var(--line);
+        color: var(--muted);
+        background: var(--surface-2);
+        padding: 4px 8px;
+        border-radius: 7px;
+        font-size: 10px;
+        font-weight: 750;
+      }
+
+      /* Process */
+      .process {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+      .step {
+        border: 1px solid var(--line);
+        border-top: 2px solid var(--accent);
+        border-radius: 18px;
+        background: var(--surface);
+        backdrop-filter: blur(12px);
+        padding: 20px;
+        cursor: pointer;
+        transition: transform 0.25s ease, border-color 0.25s ease;
+      }
+      .step:hover,
+      .step.active-step {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+      }
+      .step-num {
+        color: var(--accent);
+        font-size: 11px;
+        font-weight: 850;
+        letter-spacing: 0.1em;
+      }
+      .step h3 {
+        font-size: 15px;
+        margin: 10px 0 7px;
+      }
+      .step p {
+        font-size: 12px;
+        color: var(--muted);
+        margin: 0;
+      }
+
+      /* Contact */
+      .contact-wrap {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 22px;
+        align-items: stretch;
+      }
+      .contact-intro {
+        padding: 25px 10px 25px 0;
+      }
+      .contact-intro p {
+        color: var(--muted);
+        max-width: 430px;
+      }
+      .contact-links {
+        display: grid;
+        gap: 11px;
+        margin-top: 25px;
+      }
+      .contact-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--surface);
+        backdrop-filter: blur(12px);
+        transition: border-color 0.2s ease, transform 0.2s ease;
+      }
+      .contact-link:hover {
+        border-color: var(--accent);
+        transform: translateX(4px);
+      }
+      .contact-link .service-icon {
+        width: 40px;
+        height: 40px;
+        margin: 0;
+        flex: 0 0 auto;
+        font-size: 17px;
+      }
+      .contact-link small {
+        display: block;
+        color: var(--muted);
+        font-size: 10px;
+      }
+      .contact-link strong {
+        font-size: 13px;
+        overflow-wrap: anywhere;
+      }
+      .contact-card {
+        padding: 25px;
+      }
+      .form-note {
+        color: var(--muted);
+        font-size: 10px;
+        margin: 12px 0 0;
+      }
+
+      /* Bottom Scroll Scene Scrubber & Summary Bar (Coffee Website Style) */
+      .scene-bar {
+        position: fixed;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 45;
+        width: min(780px, calc(100vw - 28px));
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 10px 14px;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow);
+      }
+      .scene-summary {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+      }
+      .scene-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 10px var(--accent);
+        flex-shrink: 0;
+      }
+      .scene-summary-text {
+        font-size: 12px;
+        color: var(--text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .scene-summary-text strong {
+        color: var(--accent);
+        margin-right: 6px;
+      }
+      .scene-tabs {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-shrink: 0;
+      }
+      .scene-tab {
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 750;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .scene-tab.active {
+        background: linear-gradient(110deg, var(--accent), #65a7ff);
+        color: #07111d;
+      }
+
+      footer {
+        position: relative;
+        z-index: 2;
+        padding: 25px 0 92px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+      .reveal {
+        opacity: 0;
+        transform: translateY(22px);
+        transition: opacity 0.65s ease, transform 0.65s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (max-width: 900px) {
+        .hero {
+          min-height: auto;
+          grid-template-columns: 1fr;
+          gap: 26px;
+          padding-block: 52px;
+        }
+        .services-grid,
+        .process {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .scene-summary {
+          display: none;
+        }
+        .scene-bar {
+          width: auto;
+          justify-content: center;
+        }
+      }
+      @media (max-width: 680px) {
+        .container {
+          width: min(100% - 30px, 520px);
+        }
+        .nav {
+          min-height: 66px;
+        }
+        .menu-toggle {
+          display: grid;
+        }
+        .nav-links {
+          display: none;
+          position: absolute;
+          top: 66px;
+          left: 15px;
+          right: 15px;
+          padding: 15px;
+          border: 1px solid var(--line);
+          border-radius: 16px;
+          background: var(--surface-solid);
+          box-shadow: var(--shadow);
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .nav-links.open {
+          display: flex;
+        }
+        .nav-links a {
+          padding: 12px;
+          border-radius: 9px;
+          font-size: 14px;
+        }
+        .nav-actions .btn {
+          display: none;
+        }
+        .services-grid,
+        .process,
+        .contact-wrap {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <canvas id="webgl-canvas" aria-hidden="true"></canvas>
+
+    <header class="topbar">
+      <nav class="nav container" aria-label="Main navigation">
+        <a class="brand" href="#home" aria-label="Pix Elvibez home">
+          <div class="brand-avatar">
+            <svg viewBox="0 0 48 48" width="36" height="36" aria-hidden="true">
+              <path d="M5 48 C7 36 15 34 24 34 C33 34 41 36 43 48 Z" fill="#141720"/>
+              <path d="M19 34 L24 45 L29 34 Z" fill="#f5f7ff"/>
+              <path d="M16 34 L21 44 L14 40 Z" fill="#1f2433"/>
+              <path d="M32 34 L27 44 L34 40 Z" fill="#1f2433"/>
+              <ellipse cx="24" cy="22.5" rx="10.5" ry="12" fill="#c6865e"/>
+              <path d="M13.8 23.5 C14.2 32.5 19 35.2 24 35.2 C29 35.2 33.8 32.5 34.2 23.5 C33 29.2 29.5 32.2 24 32.2 C18.5 32.2 15 29.2 13.8 23.5 Z" fill="#14161f"/>
+              <path d="M19.2 27.8 Q24 26 28.8 27.8" stroke="#14161f" stroke-width="2.1" fill="none" stroke-linecap="round"/>
+              <rect x="14.6" y="18.8" width="8.2" height="5.2" rx="1" fill="rgba(255,255,255,0.08)" stroke="#11131a" stroke-width="1.9"/>
+              <rect x="25.2" y="18.8" width="8.2" height="5.2" rx="1" fill="rgba(255,255,255,0.08)" stroke="#11131a" stroke-width="1.9"/>
+              <line x1="22.8" y1="20.8" x2="25.2" y2="20.8" stroke="#11131a" stroke-width="1.9"/>
+              <circle cx="18.7" cy="21.4" r="1.5" fill="#180e07"/>
+              <circle cx="29.3" cy="21.4" r="1.5" fill="#180e07"/>
+              <path d="M13 20.5 C11 11.5 17 6.5 25 6.5 C33 6.5 37 11.5 35 20.5 C33 14.5 29 12.5 23 12.5 C17 12.5 15 15.5 13 20.5 Z" fill="#0f1117"/>
+            </svg>
+          </div>
+          <span class="brand-name">pix_<span>elvibez</span></span>
+        </a>
+        <div class="nav-links" id="navLinks">
+          <a href="#home" data-sec="home" class="active">Home</a>
+          <a href="#services" data-sec="services">Services</a>
+          <a href="#process" data-sec="process">How I Work</a>
+          <a href="#contact" data-sec="contact">Contact</a>
+        </div>
+        <div class="nav-actions">
+          <button
+            class="theme-toggle"
+            id="themeToggle"
+            type="button"
+            aria-label="Switch to light theme"
+            title="Toggle theme"
+          >
+            ☼
+          </button>
+          <a class="btn btn-primary" href="#contact"
+            >Let’s Talk <span aria-hidden="true">↗</span></a
+          >
+          <button
+            class="menu-toggle"
+            id="menuToggle"
+            type="button"
+            aria-label="Open navigation"
+            aria-expanded="false"
+          >
+            ☰
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero container" id="home" data-scene="0">
+        <div class="hero-content">
+          <div class="eyebrow">
+            <span class="pulse"></span>
+            <span>Frontend Developer &amp; UI Specialist</span>
+          </div>
+          <h1>
+            Ideas into<br /><span class="gradient-text">beautiful UI.</span>
+          </h1>
+          <p class="hero-copy">
+            I build
+            <strong>clean, responsive and user-friendly web interfaces</strong>
+            for ERP applications, business dashboards and modern websites — with
+            a focus on thoughtful details and smooth experiences.
+          </p>
+          <div class="hero-buttons">
+            <a class="btn btn-primary" href="#contact"
+              >Start a project <span aria-hidden="true">↗</span></a
+            >
+            <a class="btn btn-ghost" href="#services"
+              >Explore services <span aria-hidden="true">↓</span></a
+            >
+          </div>
+          <div class="quick-stats">
+            <div class="stat">
+              <strong>React + Angular</strong><span>Frontend development</span>
+            </div>
+            <div class="stat">
+              <strong>Responsive first</strong><span>Mobile to desktop</span>
+            </div>
+            <div class="stat">
+              <strong>UI to API</strong><span>Integration support</span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="visual"
+          aria-label="Animated web app development process: developer walks through Request Gathering, UI, Design, Web App Development, Testing and Handover"
+        >
+          <div class="walk-scene">
+            <svg class="walk-svg" viewBox="0 0 520 345" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+              <defs>
+                <radialGradient id="sceneGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#35e3d0" stop-opacity="0.16"/>
+                  <stop offset="100%" stop-color="#35e3d0" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="coatGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#1e2330"/><stop offset="100%" stop-color="#10131c"/>
+                </linearGradient>
+              </defs>
+              <ellipse cx="260" cy="230" rx="250" ry="105" fill="url(#sceneGlow)"/>
+              <circle class="twinkle" cx="24" cy="170" r="1.6" style="animation-delay:0s"/>
+              <circle class="twinkle" cx="190" cy="160" r="1.5" style="animation-delay:0.5s"/>
+              <circle class="twinkle" cx="350" cy="175" r="1.3" style="animation-delay:1.7s"/>
+              <circle class="twinkle" cx="490" cy="200" r="1.4" style="animation-delay:1.1s"/>
+              <rect class="road-base" x="0" y="302" width="520" height="9" rx="4.5"/>
+              <line class="road-dash" x1="6" y1="322" x2="514" y2="322"/>
+
+              <g id="svgStepCards"></g>
+
+              <!-- Executive Suit Coat Developer Walker (Matched to Photo) -->
+              <g id="walker" transform="translate(-30,306)" opacity="0">
+                <ellipse id="wShadow" cx="3" cy="3" rx="24" ry="5" fill="rgba(0,0,0,0.28)"/>
+                <g id="wBody">
+                  <g transform="translate(-2,-85)"><g id="armB">
+                    <rect x="-4.5" y="-3" width="9" height="32" rx="4.5" fill="#12151f"/>
+                    <circle cx="0" cy="31" r="4.6" fill="#c6865e"/>
+                  </g></g>
+                  <g transform="translate(-1,-49)"><g id="legB">
+                    <rect x="-6" y="-4" width="12" height="48" rx="6" fill="#12151f"/>
+                    <path d="M-7 40 H3 L9 44 L15 46 Q16.5 48 14 48 H-7 Z" fill="#1b2030"/>
+                    <rect x="-7" y="46" width="22" height="2.4" rx="1.2" fill="#35e3d0"/>
+                  </g></g>
+                  <!-- Tailored Black Suit Coat & White Button-Down Shirt -->
+                  <path d="M-11 -93 Q-15 -93 -15 -86 L-15 -51 Q-15 -47 -9 -47 H11 Q16 -47 16 -51 L16 -86 Q16 -93 11 -93 Z" fill="url(#coatGrad)"/>
+                  <path d="M-3.5 -93 L6.5 -93 L5 -51 L-2.5 -51 Z" fill="#f5f7ff"/>
+                  <circle cx="1.5" cy="-80" r="1" fill="#cbd5e1"/>
+                  <circle cx="1.5" cy="-70" r="1" fill="#cbd5e1"/>
+                  <circle cx="1.5" cy="-60" r="1" fill="#cbd5e1"/>
+                  <!-- Notched Coat Lapels -->
+                  <path d="M-6 -93 L-1.5 -70 L-9 -77 Z" fill="#262c3d"/>
+                  <path d="M8 -93 L3.5 -70 L11 -77 Z" fill="#262c3d"/>
+                  <g transform="translate(1,-49)"><g id="legF">
+                    <rect x="-6" y="-4" width="12" height="48" rx="6" fill="#171b29"/>
+                    <path d="M-7 40 H3 L9 44 L15 46 Q16.5 48 14 48 H-7 Z" fill="#22283b"/>
+                    <rect x="-7" y="46" width="22" height="2.4" rx="1.2" fill="#35e3d0"/>
+                  </g></g>
+                  <!-- Head (Accurate Photo Likeness: Glasses, Mustache, Jawline Beard, Swept Black Hair) -->
+                  <g transform="translate(3,-111)"><g id="wHead">
+                    <rect x="-4" y="14" width="8" height="12" rx="3" fill="#b97a54"/>
+                    <path d="M-21 8 Q-25 -18 -8 -25 Q13 -30 21 -13 L21 -3 L-21 8 Z" fill="#0f1117"/>
+                    <path d="M-16 -4 C-17 10 -8 22 3 22 C13 22 19.5 14 19 3 C18 -10 8 -20 -4 -19 C-13 -18 -16 -12 -16 -4 Z" fill="#c6865e"/>
+                    <path d="M19.2 3 q3 2.2 0 4.5" stroke="#9e6240" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+                    <circle cx="-11" cy="3" r="4" fill="#b97a54"/>
+                    <!-- Jawline Beard & Mustache -->
+                    <path d="M-12 7 C-11 18 -3 22.8 5 22.8 C13 22.8 18.5 18 19 9.5 C16.8 16 11.8 19 4 19 C-4 19 -9.5 14.5 -12 7 Z" fill="#14161e"/>
+                    <path d="M8.2 12 Q13.5 10 18.2 12.2" stroke="#14161e" stroke-width="2.3" fill="none" stroke-linecap="round"/>
+                    <!-- Eye -->
+                    <g id="eyeBlink"><g transform="translate(8,2)">
+                      <ellipse rx="4.6" ry="5.2" fill="#fff"/>
+                      <circle cx="0.8" cy="0.6" r="3.2" fill="#23130b"/>
+                      <circle cx="1.8" cy="-1.2" r="1.2" fill="#fff"/>
+                    </g></g>
+                    <!-- Rectangular Dark-Framed Glasses -->
+                    <g transform="translate(8,2)">
+                      <rect x="-7.2" y="-5.2" width="15.8" height="10.2" rx="1.8" fill="rgba(53,227,208,0.08)" stroke="#101218" stroke-width="2.2"/>
+                      <line x1="-7.2" y1="-0.8" x2="-18.5" y2="1" stroke="#101218" stroke-width="2"/>
+                    </g>
+                    <path d="M2 -8.5 Q9 -11.5 15.5 -8.5" stroke="#0f1117" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+                    <path id="mouthSmile" d="M10 15.2 Q13.5 17.2 16.8 15.2" stroke="#6e2e26" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                    <path id="mouthOpen" d="M9.5 14.2 Q13.5 20 17.5 14.2 Z" fill="#6e2e26" style="display:none"/>
+                    <!-- Neat Side-Swept Black Hair -->
+                    <path d="M-19 -1 Q-22 -27 0 -28 Q21 -28 22 -8 Q16 -15 9 -15 Q2 -15 -8 -13 Q-12 -6 -19 -1 Z" fill="#0f1117"/>
+                  </g></g>
+                  <g transform="translate(3,-85)"><g id="armF">
+                    <rect x="-4.5" y="-3" width="9" height="32" rx="4.5" fill="#181c29"/>
+                    <rect x="-4.5" y="24" width="9" height="4" rx="1.5" fill="#f5f7ff"/>
+                    <circle cx="0" cy="31" r="4.8" fill="#c6865e"/>
+                  </g></g>
+                  <g id="itClip" style="display:none" transform="translate(31,-73) rotate(-10)">
+                    <rect x="-8.5" y="-11.5" width="17" height="23" rx="2.5" fill="#fff" stroke="#c4cce6"/>
+                    <rect x="-4.5" y="-13.5" width="9" height="4.2" rx="1.5" fill="#35e3d0"/>
+                  </g>
+                  <g id="itLaptop" style="display:none" transform="translate(33,-60)">
+                    <rect x="-15" y="-1" width="30" height="3.2" rx="1.6" fill="#cfd6ee"/>
+                    <rect x="-12.5" y="-20" width="25" height="19" rx="2" fill="#10172b" stroke="#8c97b8" stroke-width="1"/>
+                  </g>
+                  <g id="itMag" style="display:none" transform="translate(21,-89)">
+                    <line x1="5.6" y1="5.6" x2="13.5" y2="13.5" stroke="#ffb84d" stroke-width="3.4" stroke-linecap="round"/>
+                    <circle r="8.5" fill="rgba(79,131,255,0.22)" stroke="#e9edff" stroke-width="2.5"/>
+                  </g>
+                </g>
+              </g>
+            </svg>
+            <div class="walk-caption" aria-live="polite">
+              <div class="cap-swap" id="capBox">
+                <span class="cap-tag" id="capTag">✦ Step 01 / 06</span>
+                <div class="cap-title" id="capTitle">Request Gathering</div>
+                <p class="cap-desc" id="capDesc">Discovery consultation, user personas, screen flows &amp; technical goals.</p>
+              </div>
+              <div class="cap-dots" id="capDots"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="container" id="services" data-scene="1">
+        <div class="section-head reveal">
+          <div class="kicker">What I can build</div>
+          <h2>
+            Frontend services for
+            <span class="gradient-text">real-world ideas.</span>
+          </h2>
+          <p>
+            From a single landing page to a multi-screen business application, I
+            help turn requirements into polished, practical web experiences.
+          </p>
+        </div>
+        <div class="services-grid">
+          <article class="service-card reveal" data-summary="React & Angular UI: Component-based ERP & business interfaces with SCSS and Bootstrap.">
+            <div class="service-icon">⌘</div>
+            <h3>React &amp; Angular UI Development</h3>
+            <p>
+              Component-based interfaces for ERP and business web applications,
+              with reusable layouts and consistent UI patterns.
+            </p>
+            <div class="tag-row">
+              <span class="tag">React</span><span class="tag">Angular</span
+              ><span class="tag">SCSS</span><span class="tag">Bootstrap</span>
+            </div>
+          </article>
+          <article class="service-card reveal" data-summary="REST API Integration: Live data binding, loading/error states, and reliable form submissions.">
+            <div class="service-icon">↔</div>
+            <h3>REST API Integration</h3>
+            <p>
+              Connect frontend screens to REST endpoints, display live data,
+              handle loading and error states, and submit forms reliably.
+            </p>
+            <div class="tag-row">
+              <span class="tag">REST APIs</span><span class="tag">JSON</span
+              ><span class="tag">Forms</span>
+            </div>
+          </article>
+          <article class="service-card reveal" data-summary="Static Landing Pages: Fast, responsive, SEO-ready pages built for conversions.">
+            <div class="service-icon">◉</div>
+            <h3>Static Landing Pages</h3>
+            <p>
+              Fast, responsive landing pages for services, campaigns, products
+              and new business ideas.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Responsive</span
+              ><span class="tag">SEO basics</span
+              ><span class="tag">CTA sections</span>
+            </div>
+          </article>
+          <article class="service-card reveal" data-summary="Web Dashboards & ERP Screens: AG Grid data tables, reports, filters, and daily workflow forms.">
+            <div class="service-icon">▥</div>
+            <h3>Web Dashboards &amp; ERP Screens</h3>
+            <p>
+              Data-focused dashboards, reports, tables, filters, pagination and
+              entry forms designed for everyday business workflows.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Reports</span><span class="tag">AG Grid</span
+              ><span class="tag">Admin UI</span>
+            </div>
+          </article>
+          <article class="service-card reveal" data-summary="Google Maps & Location Tracking: Custom map markers, live routes, and location-aware UI.">
+            <div class="service-icon">⌖</div>
+            <h3>Google Maps &amp; Location Tracking</h3>
+            <p>
+              Map views, location markers and tracking interfaces for
+              applications that need location-aware experiences.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Google Maps</span
+              ><span class="tag">Location UI</span
+              ><span class="tag">Map markers</span>
+            </div>
+          </article>
+          <article class="service-card reveal" data-summary="Portfolio, Product & Showcase Websites: Interactive, modern web showcases built for every screen.">
+            <div class="service-icon">◇</div>
+            <h3>Portfolio, Product &amp; Showcase Websites</h3>
+            <p>
+              Personal portfolios, product showcases and order-oriented websites
+              that make information easy to explore.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Portfolio</span
+              ><span class="tag">Product pages</span
+              ><span class="tag">Showcase</span>
+            </div>
+          </article>
+          <article class="service-card reveal" data-summary="Website & UI Redesign: Upgrading legacy interfaces into clean, responsive, modern UX.">
+            <div class="service-icon">✧</div>
+            <h3>Website &amp; UI Redesign</h3>
+            <p>
+              Refresh an outdated interface with clearer layouts, better visual
+              hierarchy, responsive screens and a more polished user experience.
+            </p>
+            <div class="tag-row">
+              <span class="tag">UI Refresh</span
+              ><span class="tag">Responsive redesign</span
+              ><span class="tag">UX improvements</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="container" id="process" data-scene="2">
+        <div class="section-head reveal">
+          <div class="kicker">A simple process</div>
+          <h2>
+            Clear steps. <span class="gradient-text">Solid delivery.</span>
+          </h2>
+          <p>
+            A straightforward workflow keeps the scope clear and helps us move
+            from idea to a working interface.
+          </p>
+        </div>
+        <div class="process">
+          <div class="step reveal" data-summary="01 Request Gathering — Deep-diving into requirements, user needs, and screen specifications.">
+            <div class="step-num">01 / REQUEST GATHERING</div>
+            <h3>Discover &amp; align</h3>
+            <p>
+              We deep-dive into your project requirements, user needs, screen specifications, and technical priorities.
+            </p>
+          </div>
+          <div class="step reveal" data-summary="02 UI Wireframing — Mapping information architecture, navigation paths, and responsive layouts.">
+            <div class="step-num">02 / UI WIREFRAMING</div>
+            <h3>Structure the layout</h3>
+            <p>
+              We map information architecture, navigation paths, and responsive wireframes for every screen size.
+            </p>
+          </div>
+          <div class="step reveal" data-summary="03 UI/UX Design — Crafting accessible color palettes, typography scales, and UI components.">
+            <div class="step-num">03 / UI/UX DESIGN</div>
+            <h3>Craft visual system</h3>
+            <p>
+              We shape modern visual identity, accessible color palettes, typography scales, and high-fidelity UI components.
+            </p>
+          </div>
+          <div class="step reveal" data-summary="04 Web App Development — Building modular React & Angular interfaces with REST API integration.">
+            <div class="step-num">04 / WEB APP DEVELOPMENT</div>
+            <h3>Build clean frontend</h3>
+            <p>
+              We develop modular React / Angular interfaces, integrate REST APIs, and optimize performance.
+            </p>
+          </div>
+          <div class="step reveal" data-summary="05 Testing & QA — Auditing cross-browser compatibility and responsive breakpoints.">
+            <div class="step-num">05 / TESTING &amp; QA</div>
+            <h3>Validate &amp; refine</h3>
+            <p>
+              We conduct cross-browser audits, verify responsive layouts across devices, and ensure error-free quality.
+            </p>
+          </div>
+          <div class="step reveal" data-summary="06 Handover to User — Delivering clean production code, documentation, and launch guidance.">
+            <div class="step-num">06 / HANDOVER TO USER</div>
+            <h3>Deploy &amp; deliver</h3>
+            <p>
+              We transfer clean production code, complete documentation, and guide you through a smooth launch.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="container" id="contact" data-scene="3">
+        <div class="contact-wrap">
+          <div class="contact-intro reveal">
+            <div class="kicker">Have a project?</div>
+            <h2>Let’s make it <span class="gradient-text">happen.</span></h2>
+            <p>
+              Share what you’re planning — a new website, ERP screen, dashboard
+              or API-connected interface. I’ll get back to discuss the scope.
+            </p>
+            <div class="contact-links">
+              <a class="contact-link" href="mailto:freelance.vignesh@gmail.com">
+                <span class="service-icon">✉</span
+                ><span
+                  ><small>Email me</small
+                  ><strong>freelance.vignesh@gmail.com</strong></span
+                >
+              </a>
+              <a class="contact-link" href="tel:+919342845155">
+                <span class="service-icon">☎</span
+                ><span
+                  ><small>Call / WhatsApp</small
+                  ><strong>+91 93428 45155</strong></span
+                >
+              </a>
+            </div>
+          </div>
+          <div class="contact-card reveal">
+            <div class="kicker">Tell me about your idea</div>
+            <h3
+              style="
+                font-family: 'Poppins', 'Inter', sans-serif;
+                font-size: 24px;
+                margin: 12px 0 8px;
+              "
+            >
+              Have a UI in mind?
+            </h3>
+            <p style="color: var(--muted); font-size: 14px; margin: 0 0 22px">
+              Email me with a few details about your project. We can discuss the
+              screens, features and next steps directly.
+            </p>
+            <a
+              class="btn btn-primary"
+              href="mailto:freelance.vignesh@gmail.com?subject=Freelance%20project%20enquiry"
+              >Email about your project <span aria-hidden="true">↗</span></a
+            >
+            <div
+              style="
+                margin-top: 22px;
+                padding-top: 18px;
+                border-top: 1px solid var(--line);
+              "
+            >
+              <div
+                style="font-size: 11px; color: var(--muted); margin-bottom: 5px"
+              >
+                EMAIL ADDRESS
+              </div>
+              <a
+                href="mailto:freelance.vignesh@gmail.com"
+                style="font-weight: 750; overflow-wrap: anywhere"
+                >freelance.vignesh@gmail.com</a
+              >
+            </div>
+            <p class="form-note" style="margin-top: 18px">
+              Prefer a quick conversation? Call or WhatsApp
+              <a
+                href="tel:+919342845155"
+                style="color: var(--accent); font-weight: 700"
+                >+91 93428 45155</a
+              >.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom Scroll-Scene Bar (Coffee Website Style) -->
+    <div class="scene-bar" aria-label="Section summary and navigation">
+      <div class="scene-summary">
+        <span class="scene-dot"></span>
+        <div class="scene-summary-text" id="sceneSummaryText">
+          <strong>01 / Overview:</strong> Clean, responsive React &amp; Angular UI for ERP apps, dashboards &amp; modern websites.
+        </div>
+      </div>
+      <div class="scene-tabs">
+        <button class="scene-tab active" data-target="home" type="button">01 Overview</button>
+        <button class="scene-tab" data-target="services" type="button">02 Services</button>
+        <button class="scene-tab" data-target="process" type="button">03 Workflow</button>
+        <button class="scene-tab" data-target="contact" type="button">04 Contact</button>
+      </div>
+    </div>
+
+    <footer>
+      <div class="container footer-inner">
+        <span>© <span id="year"></span> pix_elvibez · Web Development</span
+        ><span>Designed with care. Built for every screen.</span>
+      </div>
+    </footer>
+
+    <script>
+      // 1. Build the 6 SVG Step Cards cleanly
+      (function buildSvgCards() {
+        const host = document.getElementById("svgStepCards");
+        if (!host) return;
+        const defs = [
+          { x: 52, num: "01", label: "Requirements", icon: '<rect class="ill-surface" x="-13" y="-16" width="26" height="32" rx="4"/><line class="ill-line" x1="-7" y1="-6" x2="7" y2="-6"/><line class="ill-line" x1="-7" y1="1" x2="7" y2="1"/><line class="ill-line" x1="-7" y1="8" x2="4" y2="8"/>' },
+          { x: 135, num: "02", label: "UI", icon: '<rect class="ill-surface" x="-19" y="-15" width="38" height="30" rx="4"/><rect x="-15" y="-7" width="10" height="18" rx="2" fill="var(--accent-2)" opacity=".8"/><rect x="-2" y="-7" width="17" height="8" rx="2" fill="var(--accent)" opacity=".8"/>' },
+          { x: 218, num: "03", label: "Design", icon: '<circle class="ill-surface" cx="0" cy="0" r="15"/><circle cx="-5" cy="-4" r="3" fill="var(--accent)"/><circle cx="5" cy="-4" r="3" fill="var(--accent-2)"/><circle cx="0" cy="5" r="3" fill="var(--accent-3)"/>' },
+          { x: 302, num: "04", label: "Development", icon: '<rect class="ill-surface" x="-19" y="-15" width="38" height="30" rx="4"/><text x="0" y="4" text-anchor="middle" font-family="Inter,monospace" font-weight="800" font-size="13" fill="var(--accent)">&lt;/&gt;</text>' },
+          { x: 385, num: "05", label: "Testing", icon: '<circle class="ill-surface" cx="0" cy="0" r="14"/><path d="M-6 0 l4 4 l9 -9" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linecap="round"/>' },
+          { x: 468, num: "06", label: "Handover", icon: '<path class="ill-surface" d="M0 -16 C8 -8 8 4 5 11 L-5 11 C-8 4 -8 -8 0 -16 Z"/><circle cx="0" cy="-4" r="3" fill="var(--accent)"/>' }
+        ];
+        host.innerHTML = defs.map((d, i) => `
+          <g class="step-card" data-step="${i}" transform="translate(${d.x},0)">
+            <line class="conn" x1="0" y1="132" x2="0" y2="297"/>
+            <circle class="stop-ring" cx="0" cy="306" r="6"/>
+            <g class="card-body">
+              <rect class="card-bg" x="-38" y="28" width="76" height="102" rx="14"/>
+              <text class="card-num" x="0" y="46">${d.num}</text>
+              <g transform="translate(0,80)">${d.icon}</g>
+              <text class="card-label" x="0" y="119">${d.label}</text>
+            </g>
+          </g>
+        `).join("");
+      })();
+
+      // 2. Theme & Navigation
+      const root = document.documentElement;
+      const themeToggle = document.getElementById("themeToggle");
+      const storedTheme = (() => {
+        try { return localStorage.getItem("pix-theme"); } catch (_) { return null; }
+      })();
+      if (storedTheme === "light" || storedTheme === "dark") root.dataset.theme = storedTheme;
+      function updateThemeButton() {
+        const isDark = root.dataset.theme === "dark";
+        themeToggle.textContent = isDark ? "☼" : "☾";
+        document.querySelector('meta[name="theme-color"]').content = isDark ? "#080b14" : "#f5f7fc";
+      }
+      updateThemeButton();
+      themeToggle.addEventListener("click", () => {
+        root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+        try { localStorage.setItem("pix-theme", root.dataset.theme); } catch (_) {}
+        updateThemeButton();
+      });
+
+      const menuToggle = document.getElementById("menuToggle");
+      const navLinks = document.getElementById("navLinks");
+      menuToggle.addEventListener("click", () => {
+        const isOpen = navLinks.classList.toggle("open");
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+        menuToggle.textContent = isOpen ? "×" : "☰";
+      });
+      navLinks.querySelectorAll("a").forEach((link) =>
+        link.addEventListener("click", () => {
+          navLinks.classList.remove("open");
+          menuToggle.textContent = "☰";
+        })
+      );
+
+      const revealObserver = "IntersectionObserver" in window
+        ? new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                revealObserver.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.12 })
+        : null;
+      document.querySelectorAll(".reveal").forEach((el) =>
+        revealObserver ? revealObserver.observe(el) : el.classList.add("visible")
+      );
+
+      // 3. Coffee-Shop-Style Scroll-Driven 3D WebGL Scene + Executive Character in Coat
+      const sceneState = {
+        activeScene: 0,
+        scrollProgress: 0,
+        targetProgress: 0,
+        pointerX: 0,
+        pointerY: 0,
+        pulseGesture: 0
+      };
+
+      const SCENE_SUMMARIES = [
+        "<strong>01 / Overview:</strong> Clean, responsive React & Angular UI for ERP apps, dashboards & modern websites.",
+        "<strong>02 / Services:</strong> 7 specialized frontend services — React/Angular UI, REST APIs, ERP Dashboards, Google Maps & Redesigns.",
+        "<strong>03 / Workflow:</strong> 6 structured steps from Request Gathering & Wireframing to QA Testing & Production Handover.",
+        "<strong>04 / Contact:</strong> Ready to collaborate — reach out via freelance.vignesh@gmail.com or +91 93428 45155."
+      ];
+
+      const summaryEl = document.getElementById("sceneSummaryText");
+      function setSceneSummary(html) {
+        if (summaryEl) summaryEl.innerHTML = html;
+      }
+
+      document.querySelectorAll(".service-card, .step").forEach((item) => {
+        item.addEventListener("click", () => {
+          document.querySelectorAll(".service-card, .step").forEach((el) => el.classList.remove("active-card", "active-step"));
+          item.classList.add(item.classList.contains("step") ? "active-step" : "active-card");
+          if (item.dataset.summary) {
+            setSceneSummary(`<strong>Selected Focus:</strong> ${item.dataset.summary}`);
+            sceneState.pulseGesture = 1.5;
+          }
+        });
+      });
+
+      document.querySelectorAll(".scene-tab").forEach((tab, idx) => {
+        tab.addEventListener("click", () => {
+          const sec = document.getElementById(tab.dataset.target);
+          if (sec) sec.scrollIntoView({ behavior: "smooth" });
+          sceneState.activeScene = idx;
+          setSceneSummary(SCENE_SUMMARIES[idx]);
+        });
+      });
+
+      (function initThreeScene() {
+        const canvas = document.getElementById("webgl-canvas");
+        if (!canvas || typeof THREE === "undefined") return;
+
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(36, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 1.2, 6.4);
+
+        const hemi = new THREE.HemisphereLight(0xf5f7ff, 0x080b14, 1.15);
+        scene.add(hemi);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.3);
+        dirLight.position.set(4, 6, 5);
+        scene.add(dirLight);
+        const accentLight = new THREE.PointLight(0x35e3d0, 2.2, 14);
+        accentLight.position.set(-3, 2.5, 1);
+        scene.add(accentLight);
+        const blueLight = new THREE.PointLight(0x4f83ff, 1.8, 14);
+        blueLight.position.set(3, 2, -2);
+        scene.add(blueLight);
+
+        const stageGroup = new THREE.Group();
+        scene.add(stageGroup);
+
+        // Glowing Architectural Podium
+        const podiumRing = new THREE.Mesh(
+          new THREE.TorusGeometry(0.95, 0.018, 16, 64),
+          new THREE.MeshBasicMaterial({ color: 0x35e3d0 })
+        );
+        podiumRing.rotation.x = Math.PI / 2;
+        podiumRing.position.y = -1.25;
+        stageGroup.add(podiumRing);
+
+        // Materials accurately matched to Uploaded Photo (Tailored Black Coat, White Shirt, Medium-Tan Skin, Glasses, Beard)
+        const skinMat = new THREE.MeshStandardMaterial({ color: 0xc6865e, roughness: 0.55 });
+        const hairMat = new THREE.MeshStandardMaterial({ color: 0x0f1117, roughness: 0.7 });
+        const beardMat = new THREE.MeshStandardMaterial({ color: 0x14161f, roughness: 0.8 });
+        const coatMat = new THREE.MeshStandardMaterial({ color: 0x131620, roughness: 0.42, metalness: 0.12 });
+        const lapelMat = new THREE.MeshStandardMaterial({ color: 0x1c202e, roughness: 0.38 });
+        const shirtMat = new THREE.MeshStandardMaterial({ color: 0xf5f7ff, roughness: 0.35 });
+        const frameMat = new THREE.MeshStandardMaterial({ color: 0x101218, roughness: 0.2, metalness: 0.6 });
+        const lensMat = new THREE.MeshPhysicalMaterial({ color: 0x35e3d0, transparent: true, opacity: 0.18, roughness: 0.1 });
+
+        const execChar = new THREE.Group();
+        stageGroup.add(execChar);
+
+        // Tailored Trousers & Dress Shoes
+        [-0.17, 0.17].forEach((x) => {
+          const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.11, 0.85, 18), coatMat);
+          leg.position.set(x, -0.78, 0);
+          const shoe = new THREE.Mesh(new THREE.BoxGeometry(0.21, 0.11, 0.32), hairMat);
+          shoe.position.set(x, -1.2, 0.05);
+          execChar.add(leg, shoe);
+        });
+
+        // Torso: Tailored Black Suit Coat (Blazer) + Crisp White Dress Shirt
+        const torso = new THREE.Group();
+        torso.position.y = -0.32;
+        execChar.add(torso);
+
+        const coatBody = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.33, 0.86, 24), coatMat);
+        coatBody.position.y = 0.43;
+        coatBody.scale.set(1.18, 1, 0.72);
+        torso.add(coatBody);
+
+        const whiteShirt = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.8, 0.53), shirtMat);
+        whiteShirt.position.set(0, 0.45, 0.02);
+        torso.add(whiteShirt);
+
+        // White Shirt Buttons (Matches Photo)
+        [0.56, 0.4, 0.24].forEach((y) => {
+          const btn = new THREE.Mesh(new THREE.SphereGeometry(0.016, 10, 10), new THREE.MeshBasicMaterial({ color: 0xdbe4f3 }));
+          btn.position.set(0, y, 0.29);
+          torso.add(btn);
+        });
+
+        // Coat Notched Lapels & Open White Shirt Collar
+        const lapelL = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.52, 0.06), lapelMat);
+        lapelL.position.set(-0.15, 0.54, 0.26);
+        lapelL.rotation.z = -0.22;
+        const lapelR = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.52, 0.06), lapelMat);
+        lapelR.position.set(0.15, 0.54, 0.26);
+        lapelR.rotation.z = 0.22;
+        torso.add(lapelL, lapelR);
+
+        const collarL = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.15, 0.08), shirtMat);
+        collarL.position.set(-0.09, 0.82, 0.22);
+        collarL.rotation.z = 0.35;
+        const collarR = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.15, 0.08), shirtMat);
+        collarR.position.set(0.09, 0.82, 0.22);
+        collarR.rotation.z = -0.35;
+        torso.add(collarL, collarR);
+
+        // Breast Pocket Welt on Left Coat Chest (Matches Photo)
+        const pocketWelt = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.025, 0.02), lapelMat);
+        pocketWelt.position.set(0.23, 0.58, 0.26);
+        pocketWelt.rotation.z = -0.05;
+        torso.add(pocketWelt);
+
+        // Neck & Sculpted Portrait Head
+        const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.125, 0.135, 0.2, 18), skinMat);
+        neck.position.y = 0.9;
+        torso.add(neck);
+
+        const head = new THREE.Group();
+        head.position.y = 1.24;
+        torso.add(head);
+
+        const faceMesh = new THREE.Mesh(new THREE.SphereGeometry(0.37, 32, 32), skinMat);
+        faceMesh.scale.set(0.96, 1.08, 0.92);
+        head.add(faceMesh);
+
+        // Ears
+        [-0.36, 0.36].forEach((x) => {
+          const ear = new THREE.Mesh(new THREE.SphereGeometry(0.075, 12, 12), skinMat);
+          ear.position.set(x, -0.01, 0);
+          ear.scale.set(0.5, 1, 0.7);
+          head.add(ear);
+        });
+
+        // Neat Voluminous Side-Swept Black Hair (Matches Photo)
+        const hairCap = new THREE.Mesh(
+          new THREE.SphereGeometry(0.39, 28, 28, 0, Math.PI * 2, 0, Math.PI * 0.56),
+          hairMat
+        );
+        hairCap.position.y = 0.05;
+        hairCap.scale.set(0.99, 1.08, 0.98);
+        head.add(hairCap);
+
+        const hairSweptVolume = new THREE.Mesh(new THREE.BoxGeometry(0.54, 0.18, 0.42), hairMat);
+        hairSweptVolume.position.set(0.02, 0.36, 0.06);
+        hairSweptVolume.rotation.z = -0.08;
+        head.add(hairSweptVolume);
+
+        [-0.35, 0.35].forEach((x) => {
+          const sideHair = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.24, 0.16), hairMat);
+          sideHair.position.set(x, 0.05, 0.06);
+          head.add(sideHair);
+        });
+
+        // Jawline Beard & Mustache (Matches Photo)
+        const jawBeard = new THREE.Mesh(
+          new THREE.TorusGeometry(0.3, 0.062, 14, 32, Math.PI * 1.05),
+          beardMat
+        );
+        jawBeard.position.set(0, -0.1, 0.06);
+        jawBeard.rotation.x = Math.PI * 0.58;
+        jawBeard.rotation.z = -0.08;
+        head.add(jawBeard);
+
+        const chinBeard = new THREE.Mesh(new THREE.SphereGeometry(0.14, 16, 12), beardMat);
+        chinBeard.position.set(0, -0.32, 0.2);
+        chinBeard.scale.set(1.45, 0.68, 0.85);
+        head.add(chinBeard);
+
+        [-0.055, 0.055].forEach((x, idx) => {
+          const stache = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.032, 0.04), beardMat);
+          stache.position.set(x, -0.125, 0.345);
+          stache.rotation.z = idx === 0 ? 0.18 : -0.18;
+          head.add(stache);
+        });
+
+        // Eyes & Eyebrows
+        const eyeMeshes = [];
+        [-0.13, 0.13].forEach((x, i) => {
+          const eyeGroup = new THREE.Group();
+          eyeGroup.position.set(x, 0.03, 0.33);
+          const sclera = new THREE.Mesh(new THREE.SphereGeometry(0.052, 14, 14), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+          sclera.scale.set(1.2, 0.9, 0.4);
+          const iris = new THREE.Mesh(new THREE.SphereGeometry(0.034, 14, 14), new THREE.MeshBasicMaterial({ color: 0x21120a }));
+          iris.position.z = 0.016;
+          iris.scale.set(1, 1, 0.4);
+          eyeGroup.add(sclera, iris);
+          head.add(eyeGroup);
+          eyeMeshes.push(eyeGroup);
+
+          const brow = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.028, 0.03), hairMat);
+          brow.position.set(x, 0.12, 0.35);
+          brow.rotation.z = i === 0 ? -0.05 : 0.05;
+          head.add(brow);
+        });
+
+        // Rectangular Dark-Framed Eyeglasses (Matches Photo)
+        const glasses = new THREE.Group();
+        glasses.position.set(0, 0.03, 0.365);
+        [-0.135, 0.135].forEach((x) => {
+          const rim = new THREE.Group();
+          rim.position.x = x;
+          const topB = new THREE.Mesh(new THREE.BoxGeometry(0.19, 0.022, 0.022), frameMat);
+          topB.position.y = 0.052;
+          const botB = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.018, 0.02), frameMat);
+          botB.position.y = -0.052;
+          const sideL = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.115, 0.02), frameMat);
+          sideL.position.x = -0.088;
+          const sideR = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.115, 0.02), frameMat);
+          sideR.position.x = 0.088;
+          const lens = new THREE.Mesh(new THREE.PlaneGeometry(0.165, 0.095), lensMat);
+          rim.add(topB, botB, sideL, sideR, lens);
+          glasses.add(rim);
+        });
+        const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.02, 0.02), frameMat);
+        bridge.position.y = 0.02;
+        glasses.add(bridge);
+        head.add(glasses);
+
+        // Coat Arms
+        function makeArm(isRight) {
+          const pivot = new THREE.Group();
+          pivot.position.set(isRight ? 0.46 : -0.46, 0.74, 0);
+          const sleeve = new THREE.Mesh(new THREE.CylinderGeometry(0.098, 0.084, 0.58, 16), coatMat);
+          sleeve.position.y = -0.25;
+          const cuff = new THREE.Mesh(new THREE.CylinderGeometry(0.086, 0.086, 0.05, 16), shirtMat);
+          cuff.position.y = -0.53;
+          const hand = new THREE.Mesh(new THREE.SphereGeometry(0.08, 14, 14), skinMat);
+          hand.position.y = -0.59;
+          pivot.add(sleeve, cuff, hand);
+          return pivot;
+        }
+        const leftArm = makeArm(false);
+        const rightArm = makeArm(true);
+        torso.add(leftArm, rightArm);
+
+        // 3D Floating UI Holographic Screens Orbiting the Scene (Scroll Movie Props)
+        const uiOrbit = new THREE.Group();
+        uiOrbit.position.y = 0.35;
+        stageGroup.add(uiOrbit);
+
+        const screenColors = [0x35e3d0, 0x4f83ff, 0xa65bff];
+        const holoScreens = [];
+        for (let i = 0; i < 6; i++) {
+          const panel = new THREE.Group();
+          const card = new THREE.Mesh(
+            new THREE.BoxGeometry(0.52, 0.32, 0.02),
+            new THREE.MeshBasicMaterial({ color: screenColors[i % 3], transparent: true, opacity: 0.22 })
+          );
+          const bar = new THREE.Mesh(
+            new THREE.BoxGeometry(0.42, 0.04, 0.025),
+            new THREE.MeshBasicMaterial({ color: 0xf5f7ff, transparent: true, opacity: 0.5 })
+          );
+          bar.position.y = 0.08;
+          panel.add(card, bar);
+          const ang = (i / 6) * Math.PI * 2;
+          panel.position.set(Math.cos(ang) * 1.55, (i % 2) * 0.45 - 0.15, Math.sin(ang) * 1.55);
+          uiOrbit.add(panel);
+          holoScreens.push({ group: panel, ang, baseY: panel.position.y });
+        }
+
+        window.addEventListener("pointermove", (e) => {
+          sceneState.pointerX = (e.clientX / window.innerWidth - 0.5) * 2;
+          sceneState.pointerY = (e.clientY / window.innerHeight - 0.5) * 2;
+        });
+
+        window.addEventListener("resize", () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Camera & Stage Keyframes per Scroll Scene (Like Coffee Shop Website)
+        const SCENE_KF = [
+          { stageX: 2.15, stageY: -0.1, stageZ: 0, rotY: -0.38, camZ: 6.4, orbitRadius: 1.5 },
+          { stageX: -2.2, stageY: -0.05, stageZ: 0.2, rotY: 0.42, camZ: 6.0, orbitRadius: 1.85 },
+          { stageX: 2.1, stageY: -0.08, stageZ: 0.1, rotY: -0.35, camZ: 6.2, orbitRadius: 1.35 },
+          { stageX: -2.05, stageY: -0.05, stageZ: 0.35, rotY: 0.35, camZ: 5.8, orbitRadius: 1.55 }
+        ];
+
+        const clock = new THREE.Clock();
+        let blinkT = 0;
+
+        function animate() {
+          requestAnimationFrame(animate);
+          const dt = Math.min(clock.getDelta(), 0.05);
+          const t = clock.getElapsedTime();
+
+          // Smooth lerp scroll progress
+          sceneState.scrollProgress += (sceneState.targetProgress - sceneState.scrollProgress) * 0.08;
+          const kf = SCENE_KF[sceneState.activeScene] || SCENE_KF[0];
+          const mobileFactor = window.innerWidth < 900 ? 0.42 : 1;
+
+          stageGroup.position.x += (kf.stageX * mobileFactor - stageGroup.position.x) * 0.06;
+          stageGroup.position.y += (kf.stageY + Math.sin(t * 2) * 0.04 - stageGroup.position.y) * 0.08;
+          stageGroup.position.z += (kf.stageZ - stageGroup.position.z) * 0.06;
+          stageGroup.rotation.y += (kf.rotY + sceneState.pointerX * 0.15 - stageGroup.rotation.y) * 0.07;
+          camera.position.z += (kf.camZ - camera.position.z) * 0.06;
+
+          // Subtle head tracking
+          head.rotation.y = sceneState.pointerX * 0.22;
+          head.rotation.x = sceneState.pointerY * 0.1;
+
+          // Eye blink
+          blinkT += dt;
+          const blinkScale = blinkT % 4.0 > 3.86 ? 0.1 : 1;
+          eyeMeshes.forEach((e) => (e.scale.y = blinkScale));
+
+          // Executive Arm Gestures per Section
+          let rZ = -0.18, rX = -0.15, lZ = 0.18, lX = -0.15;
+          if (sceneState.pulseGesture > 0) {
+            sceneState.pulseGesture -= dt;
+            rZ = 1.15 + Math.sin(t * 10) * 0.15;
+            rX = -0.5;
+          } else if (sceneState.activeScene === 0) {
+            rZ = 0.45 + Math.sin(t * 2.5) * 0.08;
+            rX = -0.35;
+          } else if (sceneState.activeScene === 1) {
+            rZ = 0.95 + Math.sin(t * 3.2) * 0.12;
+            rX = -0.45;
+            lX = -0.4;
+          } else if (sceneState.activeScene === 2) {
+            rZ = 0.35;
+            rX = -0.75 + Math.sin(t * 6) * 0.06;
+            lX = -0.75 + Math.cos(t * 6) * 0.06;
+          } else if (sceneState.activeScene === 3) {
+            rZ = 0.75 + Math.sin(t * 2.8) * 0.08;
+            rX = -0.4;
+          }
+
+          rightArm.rotation.z += (rZ - rightArm.rotation.z) * 0.09;
+          rightArm.rotation.x += (rX - rightArm.rotation.x) * 0.09;
+          leftArm.rotation.z += (lZ - leftArm.rotation.z) * 0.09;
+          leftArm.rotation.x += (lX - leftArm.rotation.x) * 0.09;
+
+          // Orbiting 3D UI Cards respond to scroll
+          uiOrbit.rotation.y = t * 0.35 + sceneState.scrollProgress * Math.PI * 1.5;
+          holoScreens.forEach((s, i) => {
+            const rad = kf.orbitRadius;
+            s.group.position.x += (Math.cos(s.ang) * rad - s.group.position.x) * 0.06;
+            s.group.position.z += (Math.sin(s.ang) * rad - s.group.position.z) * 0.06;
+            s.group.position.y = s.baseY + Math.sin(t * 2.2 + i) * 0.1;
+            s.group.lookAt(camera.position);
+          });
+
+          renderer.render(scene, camera);
+        }
+        animate();
+      })();
+
+      // 4. Scroll Listener & Section Observer
+      const scrollProgressEl = document.getElementById("scrollProgress");
+      window.addEventListener("scroll", () => {
+        const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        const ratio = Math.min(1, Math.max(0, window.scrollY / max));
+        sceneState.targetProgress = ratio;
+        if (scrollProgressEl) scrollProgressEl.style.width = (ratio * 100).toFixed(1) + "%";
+      });
+
+      if ("IntersectionObserver" in window) {
+        const secObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const idx = Number(entry.target.dataset.scene || 0);
+                sceneState.activeScene = idx;
+                setSceneSummary(SCENE_SUMMARIES[idx]);
+                const id = entry.target.id;
+                document.querySelectorAll(".scene-tab").forEach((t) =>
+                  t.classList.toggle("active", t.dataset.target === id)
+                );
+                document.querySelectorAll(".nav-links a").forEach((a) =>
+                  a.classList.toggle("active", a.dataset.sec === id)
+                );
+              }
+            });
+          },
+          { threshold: 0.38 }
+        );
+        document.querySelectorAll("[data-scene]").forEach((s) => secObserver.observe(s));
+      }
+
+      // 5. Hero 6-Step Walker Animation
+      (function initWalker() {
+        const walker = document.getElementById("walker");
+        if (!walker) return;
+        const $ = (id) => document.getElementById(id);
+        const el = {
+          body: $("wBody"), shadow: $("wShadow"), armF: $("armF"), armB: $("armB"),
+          legF: $("legF"), legB: $("legB"), head: $("wHead"),
+          smile: $("mouthSmile"), open: $("mouthOpen"),
+          clip: $("itClip"), laptop: $("itLaptop"), mag: $("itMag"),
+        };
+        const cards = [...document.querySelectorAll(".step-card")];
+        const dots = [...document.querySelectorAll("#capDots span")];
+        const capBox = $("capBox"), capTag = $("capTag"), capTitle = $("capTitle"), capDesc = $("capDesc");
+
+        const STOPS = [52, 135, 218, 302, 385, 468];
+        const STEPS = [
+          ["Request Gathering", "Discovery consultation, user personas, screen flows & technical goals."],
+          ["UI Architecture", "Information hierarchy, navigation system & wireframe blueprints."],
+          ["UI/UX Design System", "High-fidelity visual design, accessible color tokens & component library."],
+          ["Web App Development", "Production-ready modular frontend in React & Angular with REST APIs."],
+          ["Testing & QA Audit", "Cross-device responsiveness, browser compatibility & performance verification."],
+          ["Handover to User", "Smooth production deployment, complete source code handover & documentation."],
+        ];
+
+        const segs = [];
+        STOPS.forEach((x, i) => {
+          segs.push({ k: "walk", from: i ? STOPS[i - 1] : -30, to: x, dur: i ? 1500 : 2200, target: i });
+          segs.push({ k: "act", x, dur: i === 5 ? 3200 : 2600, step: i });
+        });
+        segs.push({ k: "walk", from: STOPS[5], to: 570, dur: 1600, target: 5, exit: true });
+        segs.push({ k: "rest", dur: 700 });
+        const TOTAL = segs.reduce((s, g) => s + g.dur, 0);
+
+        const ease = (p) => 0.5 - 0.5 * Math.cos(Math.PI * p);
+        const cur = { armF: 0, armB: 0, legF: 0, legB: 0, head: 0 };
+        const damp = (k, target, dt, instant) => {
+          cur[k] = instant ? target : cur[k] + (target - cur[k]) * Math.min(1, dt * 14);
+          return cur[k];
+        };
+        const show = (node, on) => { node.style.display = on ? "" : "none"; };
+        const rot = (node, a, cx, cy) => node.setAttribute("transform", `rotate(${a.toFixed(2)} ${cx || 0} ${cy || 0})`);
+
+        let lastKey = "", lastCap = -1;
+        function setCards(on, doneUpTo) {
+          const key = on + "|" + doneUpTo;
+          if (key === lastKey) return;
+          lastKey = key;
+          cards.forEach((c, i) => {
+            c.classList.toggle("on", i === on);
+            c.classList.toggle("done", i <= doneUpTo);
+          });
+          dots.forEach((d, i) => {
+            d.classList.toggle("active", i <= Math.max(on, doneUpTo));
+            d.classList.toggle("current", i === on);
+          });
+        }
+        function setCaption(i) {
+          if (i === lastCap) return;
+          const first = lastCap === -1;
+          lastCap = i;
+          const apply = () => {
+            capTag.textContent = `✦ Step 0${i + 1} / 06`;
+            capTitle.textContent = STEPS[i][0];
+            capDesc.textContent = STEPS[i][1];
+            capBox.classList.remove("out");
+          };
+          if (first) return apply();
+          capBox.classList.add("out");
+          setTimeout(apply, 230);
+        }
+
+        let t0 = performance.now(), last = t0;
+        function frame(now, instant) {
+          const dt = Math.min(0.05, (now - last) / 1000);
+          last = now;
+          const tm = (now - t0) % TOTAL;
+          let acc = 0, seg = segs[0], local = 0;
+          for (const g of segs) {
+            if (tm < acc + g.dur) { seg = g; local = tm - acc; break; }
+            acc += g.dur;
+          }
+          render(seg, local, dt, instant);
+        }
+
+        function render(seg, local, dt, instant) {
+          let x = 0, walking = false, step = -1, t = local / 1000, on = -1, done = -1, alpha = 1;
+          if (seg.k === "walk") {
+            const p = ease(local / seg.dur);
+            x = seg.from + (seg.to - seg.from) * p;
+            walking = true;
+            done = seg.target - 1;
+            if (seg.exit) done = 5;
+            setCaption(seg.exit ? 5 : seg.target);
+            if (seg.from < 0) alpha = Math.min(1, (x + 30) / 50);
+            if (seg.exit) alpha = Math.max(0, 1 - Math.max(0, x - 500) / 60);
+          } else if (seg.k === "act") {
+            x = seg.x; step = seg.step; on = step; done = step - 1;
+            setCaption(step);
+          } else {
+            x = 600; alpha = 0; done = 5;
+          }
+          setCards(on, done);
+
+          const phase = x * 0.15;
+          let tLegF = 0, tLegB = 0, tArmF = 0, tArmB = 0, tHead = 0, bob = 0, jump = 0;
+          let clip = false, laptop = false, mag = false, joy = false;
+          if (walking) {
+            const s = Math.sin(phase);
+            tLegF = s * 30; tLegB = -tLegF;
+            tArmF = -tLegF * 0.8; tArmB = -tArmF;
+            bob = -Math.abs(Math.cos(phase)) * 3.2;
+            tHead = Math.sin(phase * 2) * 1.2;
+          } else if (step === 0) {
+            clip = true; tArmF = -58 + Math.sin(t * 7) * 6; tArmB = -68; tHead = 4 + Math.sin(t * 3) * 2;
+          } else if (step === 1) {
+            tArmF = -128 + Math.sin(t * 4) * 5; tArmB = 5; tHead = -5;
+          } else if (step === 2) {
+            tArmF = -122 + Math.sin(t * 6) * 22; tArmB = 6; tHead = -3 + Math.sin(t * 3) * 2;
+          } else if (step === 3) {
+            laptop = true; tArmF = -58 + Math.sin(t * 20) * 5; tArmB = -54 + Math.sin(t * 20 + 3) * 5; tHead = 5;
+          } else if (step === 4) {
+            mag = true; tArmF = -72 + Math.sin(t * 4.5) * 15; tArmB = 8; tHead = 2 + Math.sin(t * 4.5) * 3;
+          } else if (step === 5) {
+            joy = true;
+            const j = Math.sin(t * 4.4);
+            jump = -Math.max(0, j) * 20;
+            tArmF = -165 + Math.sin(t * 9) * 14; tArmB = -150 - Math.sin(t * 9) * 14;
+            tLegF = jump < -2 ? -12 : 0; tLegB = jump < -2 ? 14 : 0;
+          }
+
+          rot(el.armF, damp("armF", tArmF, dt, instant));
+          rot(el.armB, damp("armB", tArmB, dt, instant));
+          rot(el.legF, damp("legF", tLegF, dt, instant));
+          rot(el.legB, damp("legB", tLegB, dt, instant));
+          rot(el.head, damp("head", tHead, dt, instant), 0, 22);
+          el.body.setAttribute("transform", `translate(0 ${(bob + jump).toFixed(2)})`);
+          el.shadow.setAttribute("rx", (24 + jump * 0.45).toFixed(1));
+          show(el.clip, clip); show(el.laptop, laptop); show(el.mag, mag);
+          show(el.smile, !joy); show(el.open, joy);
+          walker.setAttribute("transform", `translate(${x.toFixed(1)} 306)`);
+          walker.setAttribute("opacity", alpha.toFixed(2));
+        }
+
+        let raf = null;
+        const loop = (now) => { frame(now, false); raf = requestAnimationFrame(loop); };
+        raf = requestAnimationFrame(loop);
+      })();
+
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
